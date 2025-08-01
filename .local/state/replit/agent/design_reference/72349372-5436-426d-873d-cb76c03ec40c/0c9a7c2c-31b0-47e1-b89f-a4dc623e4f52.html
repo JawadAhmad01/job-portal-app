@@ -1,0 +1,939 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPortal Pro - Find Your Next Opportunity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563EB',
+                        secondary: '#64748B',
+                        accent: '#10B981',
+                        danger: '#EF4444',
+                        warning: '#F59E0B',
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-inter">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-primary">JobPortal Pro</h1>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-8">
+                            <a href="#" class="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Find Jobs</a>
+                            <a href="#" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">For Employers</a>
+                            <a href="#" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Admin</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="bg-white text-primary border border-primary hover:bg-primary hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        Sign In
+                    </button>
+                    <button class="bg-primary text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        Post a Job
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- @COMPONENT: JobSearchSection -->
+        <div id="job-search-section" class="mb-8">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-r from-primary to-blue-600 rounded-2xl p-8 mb-8 text-white">
+                <div class="max-w-3xl">
+                    <h1 class="text-4xl font-bold mb-4">Find Your Dream Job Today</h1>
+                    <p class="text-xl mb-6 text-blue-100">Discover thousands of job opportunities from top companies worldwide</p>
+                    
+                    <!-- Search Bar -->
+                    <div class="bg-white rounded-lg p-2 flex flex-col md:flex-row gap-2">
+                        <div class="flex-1">
+                            <input type="text" placeholder="Job title, keywords, or company" 
+                                   class="w-full px-4 py-3 text-gray-900 rounded-md border-0 focus:ring-2 focus:ring-primary"
+                                   data-bind="searchQuery">
+                        </div>
+                        <div class="flex-1">
+                            <input type="text" placeholder="Location" 
+                                   class="w-full px-4 py-3 text-gray-900 rounded-md border-0 focus:ring-2 focus:ring-primary"
+                                   data-bind="location">
+                        </div>
+                        <button class="bg-primary hover:bg-blue-600 text-white px-8 py-3 rounded-md font-medium transition-colors"
+                                data-event="click:handleSearch">
+                            <i class="fas fa-search mr-2"></i>Search Jobs
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Results -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                
+                <!-- Sidebar Filters -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-sm p-6 sticky top-8">
+                        <h3 class="font-semibold text-gray-900 mb-4">Filters</h3>
+                        
+                        <!-- Location Filter -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                                    data-bind="selectedLocation">
+                                <option value="">All Locations</option>
+                                <option value="remote">Remote</option>
+                                <option value="new-york">New York, NY</option>
+                                <option value="san-francisco">San Francisco, CA</option>
+                                <option value="london">London, UK</option>
+                                <option value="toronto">Toronto, CA</option>
+                            </select>
+                        </div>
+
+                        <!-- Tags Filter -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Job Tags</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" data-bind="filters.frontend">
+                                    <span class="ml-2 text-sm text-gray-600">Frontend</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" data-bind="filters.backend">
+                                    <span class="ml-2 text-sm text-gray-600">Backend</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" data-bind="filters.fullstack">
+                                    <span class="ml-2 text-sm text-gray-600">Full Stack</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" data-bind="filters.design">
+                                    <span class="ml-2 text-sm text-gray-600">Design</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" data-bind="filters.mobile">
+                                    <span class="ml-2 text-sm text-gray-600">Mobile</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Salary Range -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Salary Range</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                                    data-bind="salaryRange">
+                                <option value="">Any Salary</option>
+                                <option value="0-50000">$0 - $50,000</option>
+                                <option value="50000-80000">$50,000 - $80,000</option>
+                                <option value="80000-120000">$80,000 - $120,000</option>
+                                <option value="120000+">$120,000+</option>
+                            </select>
+                        </div>
+
+                        <button class="w-full bg-primary text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
+                                data-event="click:applyFilters">
+                            Apply Filters
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Job Listings -->
+                <div class="lg:col-span-3">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900">
+                            <span data-bind="totalJobs">1,247</span> Jobs Found
+                        </h2>
+                        <select class="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                                data-bind="sortBy">
+                            <option value="newest">Newest First</option>
+                            <option value="salary-high">Highest Salary</option>
+                            <option value="salary-low">Lowest Salary</option>
+                            <option value="deadline">Application Deadline</option>
+                        </select>
+                    </div>
+
+                    <!-- @MAP: jobs.map(job => ( -->
+                    <div class="space-y-4">
+                        <!-- Job Card 1 -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+                             data-event="click:viewJobDetails">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2" data-bind="job.title">Senior Full Stack Developer</h3>
+                                    <p class="text-gray-600 mb-2" data-bind="job.company">TechCorp Solutions</p>
+                                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>
+                                        <span data-bind="job.location">San Francisco, CA</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fas fa-clock mr-1"></i>
+                                        <span data-bind="job.postedDate">Posted 2 days ago</span>
+                                    </div>
+                                    <p class="text-gray-700 mb-4" data-bind="job.description">
+                                        We're looking for an experienced full stack developer to join our growing team. You'll work on cutting-edge projects using React, Node.js, and modern web technologies...
+                                    </p>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <!-- @MAP: job.tags.map(tag => ( -->
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full" data-bind="tag">React</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full" data-bind="tag">Node.js</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full" data-bind="tag">PostgreSQL</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full" data-bind="tag">AWS</span>
+                                        <!-- @END_MAP )) -->
+                                    </div>
+                                </div>
+                                <div class="text-right ml-6">
+                                    <div class="text-2xl font-bold text-gray-900 mb-1" data-bind="job.salary">$120,000</div>
+                                    <div class="text-sm text-gray-500 mb-3">per year</div>
+                                    <div class="text-sm text-gray-500 mb-4">
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        Deadline: <span data-bind="job.deadline">Dec 31, 2024</span>
+                                    </div>
+                                    <button class="bg-primary text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors"
+                                            data-event="click:applyToJob">
+                                        Apply Now
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                                <div class="text-sm text-gray-500">
+                                    <span data-bind="job.applicants">23</span> applicants
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View Details
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Job Card 2 -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Frontend React Developer</h3>
+                                    <p class="text-gray-600 mb-2">StartupXYZ</p>
+                                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>
+                                        <span>Remote</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fas fa-clock mr-1"></i>
+                                        <span>Posted 1 week ago</span>
+                                    </div>
+                                    <p class="text-gray-700 mb-4">
+                                        Join our innovative startup as a Frontend React Developer. Work with the latest technologies and help shape the future of our product...
+                                    </p>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">React</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">TypeScript</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">CSS</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Jest</span>
+                                    </div>
+                                </div>
+                                <div class="text-right ml-6">
+                                    <div class="text-2xl font-bold text-gray-900 mb-1">$85,000</div>
+                                    <div class="text-sm text-gray-500 mb-3">per year</div>
+                                    <div class="text-sm text-gray-500 mb-4">
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        Deadline: Jan 15, 2025
+                                    </div>
+                                    <button class="bg-primary text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors">
+                                        Apply Now
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                                <div class="text-sm text-gray-500">
+                                    12 applicants
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View Details
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Job Card 3 -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Backend Python Developer</h3>
+                                    <p class="text-gray-600 mb-2">DataFlow Inc</p>
+                                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>
+                                        <span>New York, NY</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fas fa-clock mr-1"></i>
+                                        <span>Posted 3 days ago</span>
+                                    </div>
+                                    <p class="text-gray-700 mb-4">
+                                        We're seeking a skilled Backend Python Developer to build scalable APIs and work with large datasets in our data analytics platform...
+                                    </p>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Python</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">FastAPI</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">MongoDB</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Docker</span>
+                                    </div>
+                                </div>
+                                <div class="text-right ml-6">
+                                    <div class="text-2xl font-bold text-gray-900 mb-1">$110,000</div>
+                                    <div class="text-sm text-gray-500 mb-3">per year</div>
+                                    <div class="text-sm text-gray-500 mb-4">
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        Deadline: Jan 20, 2025
+                                    </div>
+                                    <button class="bg-primary text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors">
+                                        Apply Now
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                                <div class="text-sm text-gray-500">
+                                    8 applicants
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View Details
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+
+                    <!-- Pagination -->
+                    <div class="flex justify-center mt-8">
+                        <nav class="flex items-center space-x-2">
+                            <button class="px-3 py-2 rounded-md bg-white border border-gray-300 text-gray-500 hover:bg-gray-50">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="px-3 py-2 rounded-md bg-primary text-white">1</button>
+                            <button class="px-3 py-2 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">2</button>
+                            <button class="px-3 py-2 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">3</button>
+                            <span class="px-3 py-2 text-gray-500">...</span>
+                            <button class="px-3 py-2 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">10</button>
+                            <button class="px-3 py-2 rounded-md bg-white border border-gray-300 text-gray-500 hover:bg-gray-50">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: JobSearchSection -->
+
+        <!-- @COMPONENT: JobApplicationModal -->
+        <div id="job-application-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50"
+             data-event="click:closeModal">
+            <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto" data-event="click:preventDefault">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-gray-900">Apply for Senior Full Stack Developer</h2>
+                        <button class="text-gray-400 hover:text-gray-600" data-event="click:closeModal">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">TechCorp Solutions • San Francisco, CA</p>
+                </div>
+
+                <form class="p-6 space-y-6" data-event="submit:submitApplication">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                            <input type="text" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   data-bind="application.name" data-mock="true" placeholder="John Smith">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                            <input type="email" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   data-bind="application.email" data-mock="true" placeholder="john.smith@email.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Resume URL *</label>
+                        <input type="url" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent"
+                               data-bind="application.resumeUrl" data-mock="true" placeholder="https://drive.google.com/your-resume">
+                        <p class="text-sm text-gray-500 mt-1">Please provide a link to your resume (Google Drive, Dropbox, etc.)</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Cover Letter *</label>
+                        <textarea required rows="6" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent"
+                                  data-bind="application.coverLetter" data-mock="true" 
+                                  placeholder="Dear Hiring Manager,&#10;&#10;I am writing to express my interest in the Senior Full Stack Developer position..."></textarea>
+                    </div>
+
+                    <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+                        <button type="button" 
+                                class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                                data-event="click:closeModal">
+                            Cancel
+                        </button>
+                        <button type="submit" 
+                                class="px-6 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition-colors flex items-center"
+                                data-implementation="Should validate form and show loading state">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Submit Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: JobApplicationModal -->
+
+        <!-- @COMPONENT: EmployerDashboard -->
+        <div id="employer-dashboard" class="hidden">
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900">Employer Dashboard</h1>
+                    <button class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors flex items-center"
+                            data-event="click:showPostJobModal">
+                        <i class="fas fa-plus mr-2"></i>
+                        Post New Job
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-blue-100 text-primary">
+                                <i class="fas fa-briefcase text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Active Jobs</p>
+                                <p class="text-2xl font-bold text-gray-900" data-bind="stats.activeJobs">12</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-green-100 text-accent">
+                                <i class="fas fa-users text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Applications</p>
+                                <p class="text-2xl font-bold text-gray-900" data-bind="stats.totalApplications">127</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-yellow-100 text-warning">
+                                <i class="fas fa-clock text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Pending Review</p>
+                                <p class="text-2xl font-bold text-gray-900" data-bind="stats.pendingReview">43</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                                <i class="fas fa-eye text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Views</p>
+                                <p class="text-2xl font-bold text-gray-900" data-bind="stats.totalViews">2,341</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jobs Table -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-900">Your Posted Jobs</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job Title</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applications</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posted Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deadline</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <!-- @MAP: employerJobs.map(job => ( -->
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900" data-bind="job.title">Senior Full Stack Developer</div>
+                                        <div class="text-sm text-gray-500" data-bind="job.department">Engineering</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-bind="job.location">San Francisco, CA</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="text-sm font-medium text-gray-900" data-bind="job.applicationCount">23</span>
+                                        <span class="text-sm text-gray-500">applicants</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-bind="job.postedDate">Dec 15, 2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-bind="job.deadline">Dec 31, 2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800" data-bind="job.status">Active</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <button class="text-primary hover:text-blue-600" data-event="click:viewApplications">View Applications</button>
+                                        <button class="text-gray-400 hover:text-gray-600" data-event="click:editJob">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">Frontend React Developer</div>
+                                        <div class="text-sm text-gray-500">Engineering</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Remote</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="text-sm font-medium text-gray-900">12</span>
+                                        <span class="text-sm text-gray-500">applicants</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Dec 10, 2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jan 15, 2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <button class="text-primary hover:text-blue-600">View Applications</button>
+                                        <button class="text-gray-400 hover:text-gray-600">Edit</button>
+                                    </td>
+                                </tr>
+                                <!-- @END_MAP )) -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: EmployerDashboard -->
+
+        <!-- @COMPONENT: PostJobModal -->
+        <div id="post-job-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+            <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-gray-900">Post a New Job</h2>
+                        <button class="text-gray-400 hover:text-gray-600" data-event="click:closePostJobModal">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <form class="p-6 space-y-6" data-event="submit:submitJobPost">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Job Title *</label>
+                            <input type="text" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                                   data-bind="newJob.title" data-mock="true" placeholder="e.g. Senior Full Stack Developer">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Company Name *</label>
+                            <input type="text" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                                   data-bind="newJob.company" data-mock="true" placeholder="e.g. TechCorp Solutions">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location *</label>
+                            <input type="text" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                                   data-bind="newJob.location" data-mock="true" placeholder="e.g. San Francisco, CA or Remote">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Salary *</label>
+                            <input type="number" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                                   data-bind="newJob.salary" data-mock="true" placeholder="120000">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Application Deadline *</label>
+                        <input type="date" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                               data-bind="newJob.deadline" data-mock="true">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Job Description *</label>
+                        <textarea required rows="6" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                                  data-bind="newJob.description" data-mock="true" 
+                                  placeholder="Describe the role, responsibilities, requirements, and what you're looking for in a candidate..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tags (comma-separated) *</label>
+                        <input type="text" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary"
+                               data-bind="newJob.tags" data-mock="true" placeholder="React, Node.js, PostgreSQL, AWS">
+                        <p class="text-sm text-gray-500 mt-1">Add relevant skills and technologies, separated by commas</p>
+                    </div>
+
+                    <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+                        <button type="button" 
+                                class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                                data-event="click:closePostJobModal">
+                            Cancel
+                        </button>
+                        <button type="submit" 
+                                class="px-6 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition-colors flex items-center"
+                                data-implementation="Should validate form and create new job posting">
+                            <i class="fas fa-briefcase mr-2"></i>
+                            Post Job
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: PostJobModal -->
+
+        <!-- @COMPONENT: AdminDashboard -->
+        <div id="admin-dashboard" class="hidden">
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+                    <button class="bg-accent text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors flex items-center"
+                            data-event="click:exportApplicationsCSV"
+                            data-implementation="Should export all applications as CSV file">
+                        <i class="fas fa-download mr-2"></i>
+                        Export Applications CSV
+                    </button>
+                </div>
+
+                <!-- Admin Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-blue-100 text-primary">
+                                <i class="fas fa-briefcase text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Jobs</p>
+                                <p class="text-2xl font-bold text-gray-900" data-bind="adminStats.totalJobs">45</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-green-100 text-accent">
+                                <i class="fas fa-users text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Applications</p>
+                                <p class="text-2xl font-bold text-gray-900" data-bind="adminStats.totalApplications">289</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-yellow-100 text-warning">
+                                <i class="fas fa-building text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Employers</p>
+                                <p class="text-2xl font-bold text-gray-900" data-bind="adminStats.totalEmployers">18</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                                <i class="fas fa-chart-line text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Avg Applications/Job</p>
+                                <p class="text-2xl font-bold text-gray-900" data-bind="adminStats.avgApplications">6.4</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applications by Job -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-900">Applications by Job</h2>
+                    </div>
+                    
+                    <!-- @MAP: jobsWithApplications.map(job => ( -->
+                    <div class="divide-y divide-gray-200">
+                        <!-- Job Group 1 -->
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900" data-bind="job.title">Senior Full Stack Developer</h3>
+                                    <p class="text-sm text-gray-600" data-bind="job.company">TechCorp Solutions • San Francisco, CA</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-gray-900" data-bind="job.applicationCount">23</span>
+                                    <p class="text-sm text-gray-500">applications</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Applications Table -->
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applicant</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applied Date</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Resume</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <!-- @MAP: job.applications.map(application => ( -->
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900" data-bind="application.name">John Smith</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500" data-bind="application.email">john.smith@email.com</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500" data-bind="application.appliedDate">Dec 18, 2024</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                                <a href="#" class="text-primary hover:text-blue-600" data-bind="application.resumeUrl">View Resume</a>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-nowrap">
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800" data-bind="application.status">Pending</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">Sarah Johnson</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">sarah.j@email.com</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">Dec 17, 2024</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                                <a href="#" class="text-primary hover:text-blue-600">View Resume</a>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-nowrap">
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Reviewed</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">Mike Chen</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">mike.chen@email.com</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">Dec 16, 2024</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                                <a href="#" class="text-primary hover:text-blue-600">View Resume</a>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-nowrap">
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                            </td>
+                                        </tr>
+                                        <!-- @END_MAP )) -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Job Group 2 -->
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900">Frontend React Developer</h3>
+                                    <p class="text-sm text-gray-600">StartupXYZ • Remote</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-gray-900">12</span>
+                                    <p class="text-sm text-gray-500">applications</p>
+                                </div>
+                            </div>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applicant</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applied Date</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Resume</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">Emily Rodriguez</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">emily.r@email.com</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">Dec 15, 2024</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                                <a href="#" class="text-primary hover:text-blue-600">View Resume</a>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-nowrap">
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">David Kim</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">david.kim@email.com</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">Dec 14, 2024</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                                <a href="#" class="text-primary hover:text-blue-600">View Resume</a>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-nowrap">
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Reviewed</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: AdminDashboard -->
+
+    </div>
+
+    <!-- Success/Error Toast Notifications -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2" data-implementation="Show success/error messages here">
+        <!-- Success Toast -->
+        <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center hidden" id="success-toast">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span data-bind="successMessage">Application submitted successfully!</span>
+            <button class="ml-4 text-green-200 hover:text-white" data-event="click:closeToast">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Error Toast -->
+        <div class="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center hidden" id="error-toast">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span data-bind="errorMessage">Please fill in all required fields.</span>
+            <button class="ml-4 text-red-200 hover:text-white" data-event="click:closeToast">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        // Navigation between sections
+        (function() {
+            // Mock navigation functionality
+            const sections = {
+                'job-search': document.getElementById('job-search-section'),
+                'employer': document.getElementById('employer-dashboard'),
+                'admin': document.getElementById('admin-dashboard')
+            };
+
+            const navLinks = document.querySelectorAll('nav a');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const href = link.getAttribute('href');
+                    
+                    // Hide all sections
+                    Object.values(sections).forEach(section => {
+                        if (section) section.classList.add('hidden');
+                    });
+                    
+                    // Show appropriate section
+                    if (href.includes('Find Jobs') || href === '#') {
+                        sections['job-search'].classList.remove('hidden');
+                    } else if (href.includes('Employers')) {
+                        sections['employer'].classList.remove('hidden');
+                    } else if (href.includes('Admin')) {
+                        sections['admin'].classList.remove('hidden');
+                    }
+                });
+            });
+
+            // Modal functionality
+            const jobApplicationModal = document.getElementById('job-application-modal');
+            const postJobModal = document.getElementById('post-job-modal');
+
+            // Show application modal when Apply Now is clicked
+            document.querySelectorAll('[data-event*="applyToJob"]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    jobApplicationModal.classList.remove('hidden');
+                });
+            });
+
+            // Show post job modal
+            document.querySelectorAll('[data-event*="showPostJobModal"]').forEach(button => {
+                button.addEventListener('click', () => {
+                    postJobModal.classList.remove('hidden');
+                });
+            });
+
+            // Close modals
+            document.querySelectorAll('[data-event*="closeModal"]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    if (e.target === button || e.target.closest('[data-event*="closeModal"]')) {
+                        jobApplicationModal.classList.add('hidden');
+                    }
+                });
+            });
+
+            document.querySelectorAll('[data-event*="closePostJobModal"]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    if (e.target === button || e.target.closest('[data-event*="closePostJobModal"]')) {
+                        postJobModal.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Prevent modal close when clicking inside modal content
+            document.querySelectorAll('[data-event*="preventDefault"]').forEach(element => {
+                element.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            });
+
+            // Form submission handlers
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // Show success toast
+                    const successToast = document.getElementById('success-toast');
+                    successToast.classList.remove('hidden');
+                    
+                    // Hide toast after 3 seconds
+                    setTimeout(() => {
+                        successToast.classList.add('hidden');
+                    }, 3000);
+                    
+                    // Close modal if form is in modal
+                    const modal = form.closest('.fixed');
+                    if (modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Toast close functionality
+            document.querySelectorAll('[data-event*="closeToast"]').forEach(button => {
+                button.addEventListener('click', () => {
+                    button.closest('[id$="toast"]').classList.add('hidden');
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
