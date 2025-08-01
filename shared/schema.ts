@@ -60,10 +60,14 @@ export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
 });
 
-export const insertJobSchema = createInsertSchema(jobs).omit({
-  id: true,
-  createdAt: true,
-  employerId: true,
+export const insertJobSchema = z.object({
+  title: z.string().min(1, "Job title is required"),
+  description: z.string().min(1, "Job description is required"),
+  salary: z.number().min(1, "Salary must be greater than 0"),
+  location: z.string().min(1, "Location is required"),
+  deadline: z.string().min(1, "Deadline is required"),
+  tags: z.array(z.string()).min(1, "At least one tag is required"),
+  company: z.string().min(1, "Company name is required"),
 });
 
 export const insertApplicationSchema = createInsertSchema(applications).omit({

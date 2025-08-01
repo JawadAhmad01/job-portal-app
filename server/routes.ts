@@ -56,7 +56,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create a new job (employer endpoint)
   app.post("/api/jobs", async (req, res) => {
     try {
-      const jobData = insertJobSchema.parse(req.body);
+      const validatedData = insertJobSchema.parse(req.body);
+      
+      // Convert deadline string to Date object
+      const jobData = {
+        ...validatedData,
+        deadline: new Date(validatedData.deadline),
+      };
       
       // For demo purposes, using employerId = 1
       // In a real app, this would come from authentication
