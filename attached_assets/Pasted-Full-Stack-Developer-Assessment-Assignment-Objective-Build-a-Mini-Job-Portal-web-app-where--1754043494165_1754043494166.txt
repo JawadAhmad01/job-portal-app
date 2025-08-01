@@ -1,0 +1,58 @@
+Full Stack Developer Assessment Assignment
+🎯 Objective
+Build a Mini Job Portal web app where:
+* Employers can post jobs
+* Applicants can view and apply
+* Admin can review applications
+You may complete this in either:
+* MERN Stack (MongoDB, Express.js, React, Node.js)
+* Python Stack (FastAPI or Flask + React or any frontend)
+🗓️ Time Limit
+You have 48 hours to submit once you start. Estimated effort: 6–12 hours
+✅ Functional Requirements
+1. 👨‍💼 Employer Panel (Post Jobs)
+* Employers can post a job (title, description, salary, location, deadline, tags)
+* View list of all jobs posted with application counts
+2. 🌐 Public Job Board
+* Display all jobs with:
+   * Pagination or infinite scroll
+   * Filters: location, tags
+* 
+* Applicants can:
+   * View job details
+   * Apply with: Name, Email, Resume URL, Cover Letter
+* 
+3. 🛡️ Admin Panel
+* View all applications grouped by job
+* Export application list as CSV
+🔧 Technical Requirements
+Backend
+* REST API (FastAPI/Express)
+* Database (MongoDB/PostgreSQL/SQLite)
+* Models: User, Job, Application
+* Input validation & error handling
+* (Bonus) JWT-based login for employers
+Frontend
+* Use React.js or plain JS
+* Responsive layout (desktop & mobile)
+* Basic styling using Bootstrap or Tailwind
+* Form validation
+* Nice UX (feedback messages, disabled buttons while loading, etc.)
+🌟 Bonus Features (Optional)
+* Resume file upload (PDF) with preview
+* Application status: Pending, Reviewed, Rejected
+* Resume text parsing (extract name/email)
+* Dark/light mode toggle
+* Job matching (e.g., similar job suggestions by tag)
+📦 Submission Instructions
+* Submit GitHub repo with README
+   * Include clear setup steps for frontend & backend
+* (Optional) Provide live demo link (Render, Vercel, etc.)
+* Write a short note (2–3 paragraphs) explaining your approach and any challenges in readme file
+📊 Evaluation Criteria
+Area Description 🔁 Backend API logic, validation, models, error handling 🖼️ Frontend UI layout, responsiveness, form UX 🔎 Attention to Detail Edge case handling, form validation, polish 🔧 Code Quality Folder structure, clarity, comments 🚀 Bonus Any optional features or creative touches
+📍 Notes
+* You are free to use open-source libraries.
+* Focus on clean, understandable code more than perfection.
+* We value attention to detail and problem-solving above fancy features.
+
