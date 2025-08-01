@@ -44,9 +44,6 @@ export default function Navigation() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <Button variant="outline" className="text-primary border-primary hover:bg-primary hover:text-white">
-              Sign In
-            </Button>
             <Link href="/employer">
               <Button className="bg-primary text-white hover:bg-blue-600">
                 Post a Job

@@ -79,6 +79,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update a job (employer endpoint)
+  app.put("/api/jobs/:id", async (req, res) => {
+    try {
+      const jobId = parseInt(req.params.id);
+      const validatedData = insertJobSchema.parse(req.body);
+      
+      // Convert deadline string to Date object
+      const jobData = {
+        ...validatedData,
+        deadline: new Date(validatedData.deadline),
+      };
+      
+      const job = await storage.updateJob(jobId, jobData);
+      if (!job) {
+        return res.status(404).json({ message: "Job not found" });
+      }
+      
+      res.json(job);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid job data", errors: error.errors });
+      }
+      console.error("Error updating job:", error);
+      res.status(500).json({ message: "Failed to update job" });
+    }
+  });
+
+  // Delete a job (employer endpoint)
+  app.delete("/api/jobs/:id", async (req, res) => {
+    try {
+      const jobId = parseInt(req.params.id);
+      const success = await storage.deleteJob(jobId);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Job not found" });
+      }
+      
+      res.json({ message: "Job deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting job:", error);
+      res.status(500).json({ message: "Failed to delete job" });
+    }
+  });
+
   // Get jobs by employer
   app.get("/api/employer/jobs", async (req, res) => {
     try {

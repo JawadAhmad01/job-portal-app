@@ -1,17 +1,43 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import PostJobModal from "@/components/post-job-modal";
+import EditJobModal from "@/components/edit-job-modal";
 import { jobsApi } from "@/lib/api";
-import { Briefcase, Users, Clock, Eye, Plus, Calendar, MapPin } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { Briefcase, Users, Clock, Eye, Plus, Calendar, MapPin, Edit, Trash2 } from "lucide-react";
+import type { Job } from "@shared/schema";
 
 export default function EmployerDashboard() {
   const [isPostJobModalOpen, setIsPostJobModalOpen] = useState(false);
+  const [isEditJobModalOpen, setIsEditJobModalOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: jobs, isLoading } = useQuery({
     queryKey: ["/api/employer/jobs"],
     queryFn: jobsApi.getEmployerJobs,
+  });
+
+  const deleteJobMutation = useMutation({
+    mutationFn: (jobId: number) => apiRequest(`/api/jobs/${jobId}`, "DELETE"),
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Job deleted successfully!",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/employer/jobs"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete job",
+        variant: "destructive",
+      });
+    },
   });
 
   const stats = {
@@ -36,6 +62,17 @@ export default function EmployerDashboard() {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(salary);
+  };
+
+  const handleEditJob = (job: Job) => {
+    setSelectedJob(job);
+    setIsEditJobModalOpen(true);
+  };
+
+  const handleDeleteJob = async (jobId: number) => {
+    if (window.confirm("Are you sure you want to delete this job? This action cannot be undone.")) {
+      deleteJobMutation.mutate(jobId);
+    }
   };
 
   return (
@@ -150,6 +187,9 @@ export default function EmployerDashboard() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -188,6 +228,27 @@ export default function EmployerDashboard() {
                           Active
                         </span>
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleEditJob(job)}
+                            className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleDeleteJob(job.id)}
+                            disabled={deleteJobMutation.isPending}
+                            className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -215,6 +276,15 @@ export default function EmployerDashboard() {
       <PostJobModal
         isOpen={isPostJobModalOpen}
         onClose={() => setIsPostJobModalOpen(false)}
+      />
+
+      <EditJobModal
+        isOpen={isEditJobModalOpen}
+        onClose={() => {
+          setIsEditJobModalOpen(false);
+          setSelectedJob(null);
+        }}
+        job={selectedJob}
       />
     </div>
   );
