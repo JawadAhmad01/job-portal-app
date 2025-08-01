@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { insertJobSchema, type InsertJob, type Job } from "@shared/schema";
+import { insertJobSchema, type InsertJob } from "@shared/schema";
+import type { Job } from "@/lib/api";
 import { apiRequest } from "@/lib/queryClient";
 import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
@@ -41,7 +42,9 @@ export default function EditJobModal({ isOpen, onClose, job }: EditJobModalProps
   // Update form values when job changes
   useEffect(() => {
     if (job) {
-      const deadlineString = new Date(job.deadline).toISOString().split('T')[0];
+      const deadlineString = job.deadline.includes('T') 
+        ? new Date(job.deadline).toISOString().split('T')[0]
+        : job.deadline;
       form.reset({
         title: job.title,
         description: job.description,

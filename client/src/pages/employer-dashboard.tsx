@@ -8,7 +8,7 @@ import { jobsApi } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Briefcase, Users, Clock, Eye, Plus, Calendar, MapPin, Edit, Trash2 } from "lucide-react";
-import type { Job } from "@shared/schema";
+import type { Job } from "@/lib/api";
 
 export default function EmployerDashboard() {
   const [isPostJobModalOpen, setIsPostJobModalOpen] = useState(false);

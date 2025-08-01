@@ -9,6 +9,7 @@ export interface Job {
   deadline: string;
   tags: string[];
   company: string;
+  employerId: number;
   createdAt: string;
   applicationCount?: number;
 }
